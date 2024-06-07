@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>여행 코스 추천</title>
+</head>
+<body>
+    <h1>지역별 여행 코스 추천</h1>
+    <form action="/search" method="post">
+       <div>출발지 x좌표 : <input type="text" name="startX"></div>
+       <div>출발지 y좌표 : <input type="text" name="startY"></div>
+       <div>도착지 x좌표 : <input type="text" name="endX"></div>
+       <div>도착지 y좌표 : <input type="text" name="endY"></div>
+       <div>요청 시각 : <input type="time" name="reqDttm"></div>
+       <div>언어 : <input type="text" name="locale"></div>
+        <input type="submit" value="검색">
+    </form>
+</body>
+</html>

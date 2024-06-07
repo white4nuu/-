@@ -1,0 +1,12 @@
+!<!DOCTYPE html>
+<html>
+<head>
+    <title>여행 코스 결과</title>
+</head>
+<body>
+    <h1>여행 코스 결과</h1>
+    {% for course in courses %}
+        <p>{{ course.title }}</p>
+    {% endfor %}
+</body>
+</html>
