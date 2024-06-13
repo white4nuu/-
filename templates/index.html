@@ -1,18 +1,124 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>여행 코스 추천</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>우리 어디가?</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 80%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            height: 90vh;
+        }
+        .form-container {
+            flex-shrink: 0;
+        }
+        #result {
+            margin-top: 20px;
+            flex-grow: 1;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        .item {
+            margin-bottom: 20px;
+        }
+        .item h3 {
+            margin: 0;
+            font-size: 1.2em;
+            color: #333;
+        }
+        .item p {
+            margin: 5px 0;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
-    <h1>지역별 여행 코스 추천</h1>
-    <form action="/search" method="post">
-       <div>출발지 x좌표 : <input type="text" name="startX"></div>
-       <div>출발지 y좌표 : <input type="text" name="startY"></div>
-       <div>도착지 x좌표 : <input type="text" name="endX"></div>
-       <div>도착지 y좌표 : <input type="text" name="endY"></div>
-       <div>요청 시각 : <input type="time" name="reqDttm"></div>
-       <div>언어 : <input type="text" name="locale"></div>
-        <input type="submit" value="검색">
-    </form>
+    <div class="container">
+        <div class="form-container">
+            <h1>우리 어디가?</h1>
+            <select id="areaCode">
+                <option value="">지역을 고르세요</option>
+                <option value="1">서울</option>
+                <option value="6">부산</option>
+                <option value="4">대구</option>
+                <option value="2">인천</option>
+                <option value="5">광주</option>
+                <option value="3">대전</option>
+                <option value="7">울산</option>
+                <option value="8">세종</option>
+                <option value="31">경기</option>
+                <option value="32">강원</option>
+                <option value="33">충북</option>
+                <option value="34">충남</option>
+                <option value="35">경북</option>
+                <option value="36">경남</option>
+                <option value="37">전북</option>
+                <option value="38">전남</option>
+                <option value="39">제주</option>
+            </select>
+            <select id="courseCode">
+                <option value="">원하는 여행을 고르세요</option>
+                <option value="C0112">가족여행</option>
+                <option value="C0113">나홀로여행</option>
+                <option value="C0114">힐링여행</option>
+                <option value="C0115">도보여행</option>
+                <option value="C0116">캠핑여행</option>
+                <option value="C0117">맛집탐방</option>
+            </select>
+            <button onclick="fetchTourismInfo()">Search</button>
+        </div>
+        <div id="result"></div>
+    </div>
+    <script>
+        async function fetchTourismInfo() {
+            const areaCode = document.getElementById('areaCode').value;
+            const courseCode = document.getElementById('courseCode').value;
+            const resultDiv = document.getElementById('result');
+
+            if (!areaCode || !courseCode) {
+                resultDiv.innerHTML = '<p>Please enter both area and course.</p>';
+                return;
+            }
+
+            const params = new URLSearchParams({ areaCode, cat2: courseCode });
+
+            try {
+                const response = await fetch(`/tourism-info?${params.toString()}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    resultDiv.innerHTML = `<p>${data.error}</p>`;
+                } else {
+                    resultDiv.innerHTML = `<h2>Tourism Info for area code ${areaCode} and course ${courseCode}</h2>`;
+                    const items = data.response.body.items.item;
+                    resultDiv.innerHTML += '';  // Clear previous results
+                    items.forEach(item => {
+                        resultDiv.innerHTML += `<div class="item"><h3>${item.title}</h3><p>${item.addr1}</p><p>${item.overview}</p></div>`;
+                    });
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<p>An error occurred while fetching tourism info.</p>`;
+            }
+        }
+    </script>
 </body>
 </html>
