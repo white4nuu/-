@@ -82,13 +82,42 @@
                 <option value="C0114">힐링여행</option>
                 <option value="C0115">도보여행</option>
                 <option value="C0116">캠핑여행</option>
-                <option value="C0117">맛집탐방</option>
+                <option value="C0117">맛집여행</option>
             </select>
             <button onclick="fetchTourismInfo()">Search</button>
         </div>
         <div id="result"></div>
     </div>
     <script>
+        const areaNames = {
+            "1": "서울",
+            "6": "부산",
+            "4": "대구",
+            "2": "인천",
+            "5": "광주",
+            "3": "대전",
+            "7": "울산",
+            "8": "세종",
+            "31": "경기",
+            "32": "강원",
+            "33": "충북",
+            "34": "충남",
+            "35": "경북",
+            "36": "경남",
+            "37": "전북",
+            "38": "전남",
+            "39": "제주"
+        };
+
+        const courseNames = {
+            "C0112": "가족여행",
+            "C0113": "나홀로여행",
+            "C0114": "힐링여행",
+            "C0115": "도보여행",
+            "C0116": "캠핑여행",
+            "C0117": "맛집여행"
+        };
+
         async function fetchTourismInfo() {
             const areaCode = document.getElementById('areaCode').value;
             const courseCode = document.getElementById('courseCode').value;
@@ -108,7 +137,9 @@
                 if (data.error) {
                     resultDiv.innerHTML = `<p>${data.error}</p>`;
                 } else {
-                    resultDiv.innerHTML = `<h2>Tourism Info for area code ${areaCode} and course ${courseCode}</h2>`;
+                    const areaName = areaNames[areaCode];
+                    const courseName = courseNames[courseCode];
+                    resultDiv.innerHTML = `<h2>${areaName} 지역의 ${courseName} 정보</h2>`;
                     const items = data.response.body.items.item;
                     resultDiv.innerHTML += '';  // Clear previous results
                     items.forEach(item => {
